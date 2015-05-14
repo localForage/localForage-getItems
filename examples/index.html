@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Simple localForage-getItems example</title>
+  </head>
+  <body>
+    <script src="../bower_components/localforage/dist/localforage.js"></script>
+    <script src="../src/localforage-getitems.js"></script>
+    <script>
+      var driverTestOrder = [
+        localforage.WEBSQL,
+        localforage.INDEXEDDB,
+        localforage.LOCALSTORAGE
+      ];
+
+      localforage.setDriver(driverTestOrder).then(function() {
+        console.log(localforage.driver());
+ 
+        var keyValuePairs = [
+          { key: 'user-2-todo-4', value: 'bb44ccaa4444' },
+          { key: 'user-2-todo-3', value: 'bb33ccaa3333' },
+          { key: 'user-2-todo-2', value: 'bb22ccaa2222' },
+          { key: 'user-2-todo-1', value: 'bb11ccaa1111' },
+          { key: 'user-1-todo-4', value: '44aa4444bbcc' },
+          { key: 'user-1-todo-3', value: '33aa3333bbcc' },
+          { key: 'user-1-todo-2', value: '22aa2222bbcc' },
+          { key: 'user-1-todo-1', value: '11aa1111bbcc' }
+        ];
+
+        var promises = keyValuePairs.map(function(x) {
+          return localforage.setItem(x.key, x.value);
+        });
+
+        return Promise.all(promises);
+      }).then(function(){
+        return localforage.keys();
+      }).then(function(keys){
+        console.log(keys);
+
+        var itemKeys = [
+          'user-1-todo-4',
+          'user-1-todo-3',
+          'user-2-todo-2',
+          'user-2-todo-1'
+        ];
+
+        var t0 = performance.now();
+
+        localforage.getItems(itemKeys).then(function(results){
+          console.log(results);
+          var t1 = performance.now();
+          console.log("Completed after " + (t1 - t0) + " milliseconds.");
+        });
+      });
+
+      // function testPlainIndexedDB() {
+      //   var results = [];
+
+      //   var dbInfo = localforage._dbInfo;
+      //   var store = dbInfo.db.transaction(dbInfo.storeName, 'readonly')
+      //             .objectStore(dbInfo.storeName);
+
+      //   var keyRangeValue = IDBKeyRange.bound(prefix, prefix + 'uffff', false, false);
+
+      //   store.openCursor(keyRangeValue).onsuccess = function(event) {
+      //     var cursor = event.target.result;
+      //     if(cursor) {
+      //       results.push(cursor.value);
+              
+      //       cursor.continue();
+      //     } else {
+      //       console.log(results);
+      //     }
+      //   };
+
+      //   var req = store.get('user-2-todo-1');
+      //   req.onsuccess = function() {
+      //     var value = req.result;
+      //     if (value === undefined) {
+      //         value = null;
+      //     }
+
+      //     console.log(value);
+      //   };
+      // }
+
+      // function testPlainWebsql() {
+      //   var dbInfo = localforage._dbInfo;
+      //   dbInfo.db.transaction(function(tx) {
+      //     tx.executeSql('SELECT * FROM ' + dbInfo.storeName, [], function(tx, resultSet){
+      //       console.log(resultSet.rows);
+      //     });
+      //   });
+
+      //   dbInfo.db.transaction(function(tx) {
+      //     tx.executeSql('SELECT key FROM ' + dbInfo.storeName +
+      //                   ' WHERE (key LIKE ?)', [prefix + '%'], function(tx, resultSet){
+      //       console.log(resultSet.rows);
+      //     });
+      //   });
+      // }
+    </script>
+
+    <p>
+      Check your console log.
+    </p>
+    <p>
+      Restart your browser or open a new incognito tab, <br />
+      to verify that everything is stored just for a session.
+    </p>
+  </body>
+</html>

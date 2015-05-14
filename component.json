@@ -1,0 +1,11 @@
+{
+  "name": "localForage-getItems",
+  "version": "1.0.0",
+  "dependencies": {
+    "then/promise": "5.0.0"
+  },
+  "scripts": [
+    "src/localforage-getItems.js"
+  ],
+  "main": "src/localforage-getItems.js"
+}

@@ -9,14 +9,14 @@
     <script src="../src/localforage-getitems.js"></script>
     <script>
       var driverTestOrder = [
-        localforage.WEBSQL,
         localforage.INDEXEDDB,
+        localforage.WEBSQL,
         localforage.LOCALSTORAGE
       ];
 
       localforage.setDriver(driverTestOrder).then(function() {
-        console.log(localforage.driver());
- 
+        return localforage.clear();
+      }).then(function() {
         var keyValuePairs = [
           { key: 'user-2-todo-4', value: 'bb44ccaa4444' },
           { key: 'user-2-todo-3', value: 'bb33ccaa3333' },
@@ -34,9 +34,9 @@
 
         return Promise.all(promises);
       }).then(function(){
-        return localforage.keys();
-      }).then(function(keys){
-        console.log(keys);
+      //   return localforage.keys();
+      // }).then(function(keys){
+      //   console.log(keys);
 
         var itemKeys = [
           'user-1-todo-4',
@@ -45,13 +45,27 @@
           'user-2-todo-1'
         ];
 
-        var t0 = performance.now();
+        var driver = localforage.driver();
 
-        localforage.getItems(itemKeys).then(function(results){
-          console.log(results);
-          var t1 = performance.now();
-          console.log("Completed after " + (t1 - t0) + " milliseconds.");
+        Promise.resolve().then(function(){
+          var t0 = performance.now();
+          return localforage.getItems(itemKeys).then(function(results){
+            console.log(results);
+            var t1 = performance.now();
+            console.log('Completed ' + driver + ' after ' + (t1 - t0) + ' milliseconds.');
+          });
+        }).then(function(){
+          if (localforage.driver() !== localforage.LOCALSTORAGE) {
+            var t0g = performance.now();
+
+            localforage.getItems.generic.call(localforage, itemKeys).then(function(results){
+              console.log(results);
+              var t1g = performance.now();
+              console.log('Completed Generic after ' + (t1g - t0g) + ' milliseconds.');
+            });
+          }
         });
+
       });
 
       // function testPlainIndexedDB() {

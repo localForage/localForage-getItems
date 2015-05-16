@@ -27,27 +27,25 @@
     }
 
     function localforageGetItems(keys, callback) {
-        var promise = localforage.ready().then(function() {
-            var currentDriver = localforage.driver();
+        var localforageInstance = this;
+        var currentDriver = localforageInstance.driver();
 
-            if (currentDriver === localforage.INDEXEDDB) {
-                return getItemsIndexedDB(keys);
-            } else if (currentDriver === localforage.WEBSQL) {
-                return getItemsWebsql(keys);
-            } else {
-                return getItemsGeneric(keys);
-            }
-        });
-        executeCallback(promise, callback);
-        return promise;
+        if (currentDriver === localforageInstance.INDEXEDDB) {
+            return getItemsIndexedDB.call(localforageInstance, keys, callback);
+        } else if (currentDriver === localforageInstance.WEBSQL) {
+            return getItemsWebsql.call(localforageInstance, keys, callback);
+        } else {
+            return getItemsGeneric.call(localforageInstance, keys, callback);
+        }
     }
 
     function getItemsGeneric(keys, callback) {
+        var localforageInstance = this;
         var promise = new Promise(function(resolve, reject) {
             var itemPromises = [];
 
             for (var i = 0, len = keys.length; i < len; i++) {
-                itemPromises.push(getItemKeyValue(keys[i]));
+                itemPromises.push(getItemKeyValue.call(localforageInstance, keys[i]));
             }
 
             Promise.all(itemPromises).then(function(keyValuePairs) {
@@ -65,14 +63,15 @@
     }
 
     function getItemsIndexedDB(keys, callback) {
+        var localforageInstance = this;
         function comparer (a,b) {
             return a < b ? -1 : a > b ? 1 : 0;
         }
 
         var promise = new Promise(function(resolve, reject) {
-            localforage.ready().then(function() {
+            localforageInstance.ready().then(function() {
                 // Thanks https://hacks.mozilla.org/2014/06/breaking-the-borders-of-indexeddb/
-                var dbInfo = localforage._dbInfo;
+                var dbInfo = localforageInstance._dbInfo;
                 var store = dbInfo.db.transaction(dbInfo.storeName, 'readonly')
                             .objectStore(dbInfo.storeName);
 
@@ -138,9 +137,10 @@
     }
 
     function getItemsWebsql(keys, callback) {
+        var localforageInstance = this;
         var promise = new Promise(function(resolve, reject) {
-            localforage.ready().then(getSerializer).then(function(serializer) {
-                var dbInfo = localforage._dbInfo;
+            localforageInstance.ready().then(getSerializer).then(function(serializer) {
+                var dbInfo = localforageInstance._dbInfo;
                 dbInfo.db.transaction(function(t) {
 
                     var queryParts = new Array(keys.length);
@@ -206,7 +206,8 @@
     }
 
     function getItemKeyValue(key, callback) {
-        var promise = localforage.getItem(key).then(function(value) {
+        var localforageInstance = this;
+        var promise = localforageInstance.getItem(key).then(function(value) {
             return {
                 key: key,
                 value: value
@@ -230,6 +231,15 @@
         var localforagePrototype = Object.getPrototypeOf(localforage);
         if (localforagePrototype) {
             localforagePrototype.getItems = localforageGetItems;
+            localforagePrototype.getItems.indexedDB = function(){
+                return getItemsIndexedDB.apply(this, arguments);
+            };
+            localforagePrototype.getItems.websql = function(){
+                return getItemsWebsql.apply(this, arguments);
+            };
+            localforagePrototype.getItems.generic = function(){
+                return getItemsGeneric.apply(this, arguments);
+            };
         }
     }
 

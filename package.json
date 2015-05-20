@@ -1,12 +1,12 @@
 {
-  "name": "localForage-getItems",
+  "name": "localforage-getitems",
   "author": "Thodoris Greasidis",
   "description": "Adds getItems method to localForage.",
   "keywords": [
     "localforage",
-    "sessionstorage"
+    "getItems"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/thgreasi/localForage-getItems",
   "repository": {
     "type": "git",

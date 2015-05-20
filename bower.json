@@ -1,6 +1,6 @@
 {
-  "name": "localForage-getItems",
-  "version": "1.0.0",
+  "name": "localforage-getitems",
+  "version": "1.0.1",
   "main": [
     "src/localforage-getItems.js"
   ],

@@ -31,8 +31,8 @@
     "phantomjs": "^1.9.7-12",
     "uglify-js": "^2.3.x"
   },
-  "browser": "src/localforage-getItems.js",
-  "main": "src/localforage-getItems.js",
+  "browser": "src/localforage-getitems.js",
+  "main": "src/localforage-getitems.js",
   "licence": "Apache-2.0",
   "bugs": {
     "url": "http://github.com/thgreasi/localForage-getItems/issues"

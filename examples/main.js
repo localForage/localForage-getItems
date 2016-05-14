@@ -1,4 +1,12 @@
-define(['../bower_components/localforage/dist/localforage', '../src/localforage-getitems'], function(localforage, getItems) {
+requirejs.config({
+    paths: {
+        localforage: '../node_modules/localforage/dist/localforage'
+    }
+});
+define([
+  'localforage',
+  '../dist/localforage-getitems'
+], function(localforage, getItems) {
   var driverTestOrder = [
     localforage.WEBSQL,
     localforage.INDEXEDDB,

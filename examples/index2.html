@@ -5,8 +5,8 @@
     <title>Simple localForage-getItems example</title>
   </head>
   <body>
-    <script src="../bower_components/localforage/dist/localforage.js"></script>
-    <script src="../src/localforage-getitems.js"></script>
+    <script src="../node_modules/localforage/dist/localforage.js"></script>
+    <script src="../dist/localforage-getitems.js"></script>
     <script>
       var driverTestOrder = [
         localforage.INDEXEDDB,
@@ -60,7 +60,7 @@
         Promise.resolve().then(function(){
           var t0 = performance.now();
           return localforage.getItems(itemKeys).then(function(results){
-            console.log(results);
+            console.log('getItems', results);
             var t1 = performance.now();
             console.log('Completed ' + driver + ' after ' + (t1 - t0) + ' milliseconds.');
           });
@@ -69,7 +69,7 @@
             var t0g = performance.now();
 
             localforage.getItems.generic.call(localforage, itemKeys).then(function(results){
-              console.log(results);
+              console.log('getItemsGeneric', results);
               var t1g = performance.now();
               console.log('Completed Generic after ' + (t1g - t0g) + ' milliseconds.');
             });

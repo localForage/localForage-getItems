@@ -5,7 +5,8 @@ Adds getItems method to [localForage](https://github.com/mozilla/localForage).
 
 ## Requirements
 
-* [localForage](https://github.com/mozilla/localForage) v1.2.1+
+* [localForage](https://github.com/mozilla/localForage) v1.4.0+
+  * for earlier versions of localforage, please use the v1.1.x releases
 
 ## Installation
 `npm i localforage-getitems`

@@ -1,4 +1,5 @@
 {
+    "esnext": true,
     "disallowSpacesInAnonymousFunctionExpression": {
         "beforeOpeningRoundBrace": true
     },
@@ -25,5 +26,6 @@
     "validateQuoteMarks": {
         "escape": true,
         "mark": "'"
-    }
+    },
+    "validateIndentation": 4
 }

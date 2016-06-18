@@ -25,6 +25,7 @@
                 callback(error);
             });
         }
+        return promise;
     }
 
     function getItemKeyValue(key, callback) {
@@ -37,6 +38,38 @@
         });
         executeCallback(promise, callback);
         return promise;
+    }
+
+    function getItemsGeneric(keys /*, callback*/) {
+        var localforageInstance = this;
+        var promise = new Promise(function (resolve, reject) {
+            var itemPromises = [];
+
+            for (var i = 0, len = keys.length; i < len; i++) {
+                itemPromises.push(getItemKeyValue.call(localforageInstance, keys[i]));
+            }
+
+            Promise.all(itemPromises).then(function (keyValuePairs) {
+                var result = {};
+                for (var i = 0, len = keyValuePairs.length; i < len; i++) {
+                    var keyValuePair = keyValuePairs[i];
+
+                    result[keyValuePair.key] = keyValuePair.value;
+                }
+                resolve(result);
+            }).catch(reject);
+        });
+        return promise;
+    }
+
+    function getAllItemsUsingIterate() {
+        var localforageInstance = this;
+        var accumulator = {};
+        return localforageInstance.iterate(function (value, key /*, iterationNumber*/) {
+            accumulator[key] = value;
+        }).then(function () {
+            return accumulator;
+        });
     }
 
     function getIDBKeyRange() {
@@ -54,7 +87,7 @@
 
     var idbKeyRange = getIDBKeyRange();
 
-    function getItemsIndexedDB(keys, callback) {
+    function getItemsIndexedDB(keys /*, callback*/) {
         var localforageInstance = this;
         function comparer(a, b) {
             return a < b ? -1 : a > b ? 1 : 0;
@@ -118,11 +151,10 @@
                 };
             }).catch(reject);
         });
-        executeCallback(promise, callback);
         return promise;
     }
 
-    function getItemsWebsql(keys, callback) {
+    function getItemsWebsql(keys /*, callback*/) {
         var localforageInstance = this;
         var promise = new Promise(function (resolve, reject) {
             localforageInstance.ready().then(function () {
@@ -161,44 +193,28 @@
                 });
             }).catch(reject);
         });
-        executeCallback(promise, callback);
-        return promise;
-    }
-
-    function getItemsGeneric(keys, callback) {
-        var localforageInstance = this;
-        var promise = new Promise(function (resolve, reject) {
-            var itemPromises = [];
-
-            for (var i = 0, len = keys.length; i < len; i++) {
-                itemPromises.push(getItemKeyValue.call(localforageInstance, keys[i]));
-            }
-
-            Promise.all(itemPromises).then(function (keyValuePairs) {
-                var result = {};
-                for (var i = 0, len = keyValuePairs.length; i < len; i++) {
-                    var keyValuePair = keyValuePairs[i];
-
-                    result[keyValuePair.key] = keyValuePair.value;
-                }
-                resolve(result);
-            }).catch(reject);
-        });
-        executeCallback(promise, callback);
         return promise;
     }
 
     function localforageGetItems(keys, callback) {
         var localforageInstance = this;
-        var currentDriver = localforageInstance.driver();
 
-        if (currentDriver === localforageInstance.INDEXEDDB) {
-            return getItemsIndexedDB.call(localforageInstance, keys, callback);
-        } else if (currentDriver === localforageInstance.WEBSQL) {
-            return getItemsWebsql.call(localforageInstance, keys, callback);
+        var promise;
+        if (!arguments.length || keys === null) {
+            promise = getAllItemsUsingIterate.apply(localforageInstance);
         } else {
-            return getItemsGeneric.call(localforageInstance, keys, callback);
+            var currentDriver = localforageInstance.driver();
+            if (currentDriver === localforageInstance.INDEXEDDB) {
+                promise = getItemsIndexedDB.apply(localforageInstance, arguments);
+            } else if (currentDriver === localforageInstance.WEBSQL) {
+                promise = getItemsWebsql.apply(localforageInstance, arguments);
+            } else {
+                promise = getItemsGeneric.apply(localforageInstance, arguments);
+            }
         }
+
+        executeCallback(promise, callback);
+        return promise;
     }
 
     function extendPrototype(localforage) {
@@ -219,9 +235,9 @@
 
     var extendPrototypeResult = extendPrototype(localforage);
 
-    exports.getItemsGeneric = getItemsGeneric;
     exports.localforageGetItems = localforageGetItems;
     exports.extendPrototype = extendPrototype;
     exports.extendPrototypeResult = extendPrototypeResult;
+    exports.getItemsGeneric = getItemsGeneric;
 
 }));

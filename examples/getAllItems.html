@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Simple localForage-getItems (all) example</title>
+  </head>
+  <body>
+    <script src="../node_modules/localforage/dist/localforage.js"></script>
+    <script src="../dist/localforage-getitems.js"></script>
+    <script>
+      var driverTestOrder = [
+        localforage.INDEXEDDB,
+        localforage.WEBSQL,
+        localforage.LOCALSTORAGE
+      ];
+
+      var n = 1000;
+
+      function initDb() {
+        var initPromise = localforage.setDriver(driverTestOrder).then(function() {
+          return localforage.clear();
+        }).then(function() {
+          var totalKeyValues = [];
+          for (var i = 0; i < n; i++) {
+            var key = i + 'key';
+            var value = ((Math.random() * n) | 0) + 'value';
+            totalKeyValues.push([key, value]);
+          }
+
+          var totalKeyValuesPromises = totalKeyValues.map(function(x) {
+            return localforage.setItem(x[0], x[1]);
+          });
+
+          var promiseAll = Promise.all(totalKeyValuesPromises);
+          return promiseAll;
+        });
+        return initPromise;
+      }
+
+      Promise.resolve().then(function() {
+        return time('initDb', function () {
+          return initDb().then(function() {
+            console.log(localforage.driver());
+          });
+        });
+      }).then(function(){
+        return time('getItems()', function () {
+          return localforage.getItems();
+        });
+      }).then(function(){
+        return time('iterate', function () {
+          var accumulator = {};
+          return localforage.iterate(function(value, key/*, iterationNumber*/) {
+              accumulator[key] = value;
+          }).then(function() {
+              return accumulator;
+          });
+        });
+      }).then(function(){
+        return time('keys + getItems', function () {
+          return localforage.keys().then(function(keys){
+            return localforage.getItems(keys);
+          });
+        });
+      }).then(function(){
+        return time('keys + getItem + Promise.all', function () {
+          return localforage.keys().then(function(keys){
+            // return Promise.all(keys.map(function(key){
+            //   return localforage.getItem(key);
+            // }));
+            var itemPromises = [];
+            for (var i = 0, len = keys.length; i < len; i++) {
+              itemPromises.push(localforage.getItem(keys[i]));
+            }
+            return Promise.all(itemPromises);
+          });
+        });
+      });
+
+      function time(name, fn) {
+        var t0 = performance.now();
+        console.log('Starting ' + name);
+        var result = fn();
+        if (typeof result.then === 'function') {
+          return result.then(logResult);
+        }
+
+        logResult(result);
+
+        function logResult(result) {
+          var t1 = performance.now();
+          if (result){
+            console.log(name + ' results', result);
+          }
+          console.log('Completed ' + name + ' after ' + (t1 - t0) + ' milliseconds.');
+        }
+        
+        return Promise.resolve();
+      }
+
+    </script>
+
+    <p>
+      Check your console log.
+    </p>
+  </body>
+</html>

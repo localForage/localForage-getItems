@@ -34,7 +34,7 @@
         }).then(function() {
           var totalKeyValues = [];
           for (var i = 0; i < n; i++) {
-            var key = ((Math.random() * n) | 0) + 'key';
+            var key = i + 'key';
             var value = ((Math.random() * n) | 0) + 'value';
             totalKeyValues.push([key, value]);
           }

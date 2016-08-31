@@ -11,7 +11,7 @@
             return getSerializerPromise.result;
         }
         if (!localForageInstance || typeof localForageInstance.getSerializer !== 'function') {
-            Promise.reject(new Error('localforage.getSerializer() was not available! ' + 'localforage v1.4+ is required!'));
+            return Promise.reject(new Error('localforage.getSerializer() was not available! ' + 'localforage v1.4+ is required!'));
         }
         getSerializerPromise.result = localForageInstance.getSerializer();
         return getSerializerPromise.result;

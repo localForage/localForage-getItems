@@ -13,7 +13,7 @@ Adds getItems method to [localForage](https://github.com/mozilla/localForage).
 
 ## jsperf links
 * [default driver order (indexedDB prefered)](https://jsperf.com/localforage-getitems-2017/1)
-* [websql (not for firefox)](https://jsperf.com/localforage-getitems-websql-2017/1)
+* [websql (not for firefox)](https://jsperf.com/localforage-getitems-websql-2017b/1)
 
 ## API
 Just like `getItem()` but you can pass an array with the keys that need to be retrieved.

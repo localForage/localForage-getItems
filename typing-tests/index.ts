@@ -1,13 +1,12 @@
-﻿/// <reference types="localforage" />
-/// <reference path="../typings/index.d.ts" />
+﻿import { extendPrototype } from 'localforage-getitems';
 
-import { extendPrototype } from 'localforage-getitems';
+declare let localforage: LocalForage;
 
-declare let localForageInstance: LocalForage;
+namespace LocalForageGetItemsTest {
 
-namespace LocalForageObservableTest {
-
-    let localforage: LocalForageWithGetItems = extendPrototype(localForageInstance);
+    {
+        let localforage2: LocalForageWithGetItems = extendPrototype(localforage);
+    }
 
     {
         let itemsPromise: Promise<object> = localforage.getItems();

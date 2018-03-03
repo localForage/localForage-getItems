@@ -42,6 +42,6 @@
     "typescript": "^2.0.3"
   },
   "dependencies": {
-    "localforage": ">=1.4.0"
+    "localforage": ">=1.6.0"
   }
 }

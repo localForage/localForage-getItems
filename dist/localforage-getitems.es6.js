@@ -88,6 +88,7 @@ function getIDBKeyRange() {
 var idbKeyRange = getIDBKeyRange();
 
 function getItemsIndexedDB(keys /*, callback*/) {
+    keys = keys.slice();
     var localforageInstance = this;
     function comparer(a, b) {
         return a < b ? -1 : a > b ? 1 : 0;

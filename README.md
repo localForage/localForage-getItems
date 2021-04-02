@@ -11,6 +11,14 @@ Adds getItems method to [localForage](https://github.com/mozilla/localForage).
 ## Installation
 `npm i localforage-getitems`
 
+## Importing
+```javascript
+import localForage from 'localforage';
+import { extendPrototype } from 'localforage-getitems';
+
+extendPrototype(localforage);
+```
+
 ## jsperf links
 * [default driver order (indexedDB prefered)](https://jsperf.com/localforage-getitems-2017/1)
 * [websql (not for firefox)](https://jsperf.com/localforage-getitems-websql-2017b/1)

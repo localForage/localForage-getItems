@@ -1,8 +1,8 @@
 {
-  "name": "localforage-getitems",
-  "version": "1.4.2",
+  "name": "@converse/localforage-getitems",
+  "version": "1.4.3",
   "description": "Adds getItems method to localForage.",
-  "homepage": "https://github.com/thgreasi/localForage-getItems",
+  "homepage": "https://github.com/conversejs/localForage-getItems",
   "main": "dist/localforage-getitems.js",
   "jsnext:main": "dist/localforage-getitems.es6.js",
   "typings": "typings/index.d.ts",
@@ -10,21 +10,23 @@
     "prebuild": "eslint lib test",
     "build": "rollup -c rollup.config.umd.js && rollup -c rollup.config.es6.js",
     "pretest": "rollup -c rollup.config.test.js",
-    "test": "mocha build/test-bundle.js && node_modules/.bin/tsc --project typing-tests",
+    "test": "mocha build/test-bundle.js && tsc --project typing-tests",
     "prepublish": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thgreasi/localForage-getItems.git"
+    "url": "git://github.com/conversejs/localForage-getItems.git"
   },
   "keywords": [
     "localforage",
-    "getItems"
+    "getItems",
+    "indexeddb"
   ],
   "author": "Thodoris Greasidis",
+  "contributors": ["JC Brand <jc@opkode.com>"],
   "licence": "Apache-2.0",
   "bugs": {
-    "url": "http://github.com/thgreasi/localForage-getItems/issues"
+    "url": "http://github.com/conversejs/localForage-getItems/issues"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

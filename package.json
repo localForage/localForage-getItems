@@ -1,8 +1,8 @@
 {
-  "name": "localforage-getitems",
+  "name": "@converse/localforage-getitems",
   "version": "1.4.2",
   "description": "Adds getItems method to localForage.",
-  "homepage": "https://github.com/thgreasi/localForage-getItems",
+  "homepage": "https://github.com/conversejs/localForage-getItems",
   "main": "dist/localforage-getitems.js",
   "jsnext:main": "dist/localforage-getitems.es6.js",
   "typings": "typings/index.d.ts",

@@ -15,16 +15,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thgreasi/localForage-getItems.git"
+    "url": "git://github.com/conversejs/localForage-getItems.git"
   },
   "keywords": [
     "localforage",
     "getItems"
   ],
   "author": "Thodoris Greasidis",
+  "contributors": ["JC Brand <jc@opkode.com>"],
   "licence": "Apache-2.0",
   "bugs": {
-    "url": "http://github.com/thgreasi/localForage-getItems/issues"
+    "url": "http://github.com/conversejs/localForage-getItems/issues"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

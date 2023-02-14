@@ -1,6 +1,6 @@
 {
   "name": "@converse/localforage-getitems",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Adds getItems method to localForage.",
   "homepage": "https://github.com/conversejs/localForage-getItems",
   "main": "dist/localforage-getitems.js",
@@ -19,7 +19,8 @@
   },
   "keywords": [
     "localforage",
-    "getItems"
+    "getItems",
+    "indexeddb"
   ],
   "author": "Thodoris Greasidis",
   "contributors": ["JC Brand <jc@opkode.com>"],
